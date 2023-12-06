@@ -2,7 +2,7 @@ import chess
 import random
 import time
 board = chess.Board()
-
+print([str(move) for move in board.legal_moves])
 def ai_next_move(player1_move:str) -> list:
     '''Function receives a valid move from player1, ai makes a move 
        and returns a list of next legal moves player can make.'''
@@ -14,5 +14,3 @@ def ai_next_move(player1_move:str) -> list:
     
     next_legal_moves = ' '.join([str(move) for move in board.legal_moves])
     return str(ai_move), next_legal_moves
-
-print(ai_next_move("g1f3"))
