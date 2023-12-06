@@ -4,7 +4,9 @@ function pieceTheme (piece) {
 
 var config = {
     pieceTheme: pieceTheme,
-    position: 'start'
+    position: 'start',
+    draggable: true,
+    dropOffBoard: 'snapback',
 }
 var board = Chessboard('board', config)
   
