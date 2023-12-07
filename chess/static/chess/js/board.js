@@ -15,6 +15,12 @@ function onDrop (source, target) {
     // http request send the current move made
     // update game return next legal move and ai made move
     // update board with the ai made move
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        console.log(this.responseText);
+    }
+    xhttp.open("GET", game_url);
+    xhttp.send();
 }
 
 var config = {
@@ -27,4 +33,3 @@ var config = {
 var board = Chessboard('board', config)
   
 $('#startBtn').on('click', board.start)
-$('#clearBtn').on('click', board.clear)

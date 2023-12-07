@@ -24,5 +24,8 @@
             crossorigin="anonymous"></script>
     
     <script src="{% static 'chess/js/board.js' %}"></script>
+    <script>
+        const game_url = "{% url 'chess:play_step' %}";
+    </script>
 </body>
 </html>
