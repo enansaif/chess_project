@@ -26,6 +26,7 @@
     <script src="{% static 'chess_app/js/board.js' %}"></script>
     <script>
         const game_url = "{% url 'chess_app:play_step' %}";
+        var csrf_token = "{{ csrf_token }}";
     </script>
 </body>
 </html>

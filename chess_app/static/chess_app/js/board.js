@@ -19,9 +19,11 @@ function onDrop (source, target) {
     xhttp.onload = function() {
         console.log(this.responseText);
     }
-    let data = {move}
-    xhttp.open("POST", game_url); // game url sent from rendered template
-    xhttp.send(JSON.stringify(data));
+
+    xhttp.open("POST", game_url, true); // game url sent from rendered template
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.setRequestHeader("X-CSRFToken", csrf_token);
+    xhttp.send(JSON.stringify({move}));
 }
 
 var config = {
