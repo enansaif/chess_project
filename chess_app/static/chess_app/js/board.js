@@ -1,5 +1,5 @@
 function pieceTheme (piece) {
-    return 'static/chess/img/chesspieces/' + piece + '.png'
+    return 'static/chess_app/img/chesspieces/' + piece + '.png'
 }
 
 var legal_moves = ['g1h3', 'g1f3', 'b1c3', 'b1a3', 'h2h3', 'g2g3', 'f2f3', 
@@ -19,8 +19,9 @@ function onDrop (source, target) {
     xhttp.onload = function() {
         console.log(this.responseText);
     }
-    xhttp.open("GET", game_url);
-    xhttp.send();
+    let data = {move}
+    xhttp.open("POST", game_url); // game url sent from rendered template
+    xhttp.send(JSON.stringify(data));
 }
 
 var config = {
