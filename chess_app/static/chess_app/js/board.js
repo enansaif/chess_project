@@ -8,16 +8,16 @@ var legal_moves = ['g1h3', 'g1f3', 'b1c3', 'b1a3', 'h2h3', 'g2g3', 'f2f3',
 
 function onDrop (source, target) {
     let move = source + target
-    console.log(move)
+    
     if (!(legal_moves.includes(move))) {
         return 'snapback'
     }
-    // http request send the current move made
-    // update game return next legal move and ai made move
-    // update board with the ai made move
+
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
-        console.log(this.responseText);
+        let json_data = JSON.parse(this.responseText);
+        legal_moves = json_data['legal_moves'].split(',');
+        board.position(json_data['curr_board'], false);
     }
 
     xhttp.open("POST", game_url, true); // game url sent from rendered template
@@ -31,7 +31,7 @@ var config = {
     onDrop: onDrop,
     position: 'start',
     draggable: true,
-    dropOffBoard: 'snapback',
+    showNotation: false,
 }
 var board = Chessboard('board', config)
   
