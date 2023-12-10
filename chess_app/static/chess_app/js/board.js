@@ -4,7 +4,8 @@ function pieceTheme (piece) {
 
 var legal_moves = ['g1h3', 'g1f3', 'b1c3', 'b1a3', 'h2h3', 'g2g3', 'f2f3', 
                    'e2e3', 'd2d3', 'c2c3', 'b2b3', 'a2a3', 'h2h4', 'g2g4', 
-                   'f2f4', 'e2e4', 'd2d4', 'c2c4', 'b2b4', 'a2a4']
+                   'f2f4', 'e2e4', 'd2d4', 'c2c4', 'b2b4', 'a2a4'];
+var promotions = [];
 
 function onDrop (source, target) {
     let move = source + target
@@ -13,10 +14,16 @@ function onDrop (source, target) {
         return 'snapback'
     }
 
+    if (promotions.includes(move)) {
+        let selectedOption = document.querySelector('input[name="piece"]:checked');
+        move += selectedOption.value;
+    }
+
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
         let json_data = JSON.parse(this.responseText);
         legal_moves = json_data['legal_moves'].split(',');
+        promotions = json_data['promotions'].split(',');
         board.position(json_data['curr_board'], false);
     }
 
@@ -34,5 +41,4 @@ var config = {
     showNotation: false,
 }
 var board = Chessboard('board', config)
-  
-$('#startBtn').on('click', board.start)
+$(window).resize(board.resize)

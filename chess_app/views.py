@@ -9,9 +9,10 @@ def home(request):
 def play_step(request):
     if request.method == 'POST':
         move = json.loads(request.body).get('move')
-        curr_board, next_legal_moves = game.ai_next_move(move)
+        curr_board, legal_moves, promotions = game.play(move)
         data = {
             'curr_board': curr_board,
-            'legal_moves': next_legal_moves,
+            'legal_moves': legal_moves,
+            'promotions': promotions,
         }
     return JsonResponse(data)
