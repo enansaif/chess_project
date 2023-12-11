@@ -1,17 +1,11 @@
 function pieceTheme (piece) {
-    return 'static/chess_app/img/chesspieces/' + piece + '.png'
+    return 'static/chess_app/img/chesspieces/' + piece + '.png';
 }
-
-var legal_moves = ['g1h3', 'g1f3', 'b1c3', 'b1a3', 'h2h3', 'g2g3', 'f2f3', 
-                   'e2e3', 'd2d3', 'c2c3', 'b2b3', 'a2a3', 'h2h4', 'g2g4', 
-                   'f2f4', 'e2e4', 'd2d4', 'c2c4', 'b2b4', 'a2a4'];
-var promotions = [];
 
 function onDrop (source, target) {
     let move = source + target
-    
     if (!(legal_moves.includes(move))) {
-        return 'snapback'
+        return'snapback';
     }
 
     if (promotions.includes(move)) {
@@ -22,8 +16,16 @@ function onDrop (source, target) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
         let json_data = JSON.parse(this.responseText);
+
         legal_moves = json_data['legal_moves'].split(',');
         promotions = json_data['promotions'].split(',');
+
+        if (json_data['is_game_over']) {
+            let status = document.getElementById('status');
+            status.innerText = 'Game Over';
+            legal_moves = [];
+        }
+
         board.position(json_data['curr_board'], false);
     }
 
@@ -33,6 +35,10 @@ function onDrop (source, target) {
     xhttp.send(JSON.stringify({move}));
 }
 
+var legal_moves = ['g1h3', 'g1f3', 'b1c3', 'b1a3', 'h2h3', 'g2g3', 'f2f3', 
+                   'e2e3', 'd2d3', 'c2c3', 'b2b3', 'a2a3', 'h2h4', 'g2g4', 
+                   'f2f4', 'e2e4', 'd2d4', 'c2c4', 'b2b4', 'a2a4'];
+var promotions = [];
 var config = {
     pieceTheme: pieceTheme,
     onDrop: onDrop,
@@ -40,5 +46,5 @@ var config = {
     draggable: true,
     showNotation: false,
 }
-var board = Chessboard('board', config)
-$(window).resize(board.resize)
+var board = Chessboard('board', config);
+$(window).resize(board.resize);
