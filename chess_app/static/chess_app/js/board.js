@@ -19,14 +19,14 @@ function onDrop (source, target) {
 
         legal_moves = json_data['legal_moves'].split(',');
         promotions = json_data['promotions'].split(',');
+        is_game_over = json_data['is_game_over'];
 
-        if (json_data['is_game_over']) {
+        if (!(is_game_over)){
+            board.position(json_data['curr_board']);
+        } else {
             let status = document.getElementById('status');
             status.innerText = 'Game Over';
-            legal_moves = [];
         }
-
-        board.position(json_data['curr_board'], false);
     }
 
     xhttp.open("POST", game_url, true); // game url sent from rendered template
@@ -35,14 +35,10 @@ function onDrop (source, target) {
     xhttp.send(JSON.stringify({move}));
 }
 
-var legal_moves = ['g1h3', 'g1f3', 'b1c3', 'b1a3', 'h2h3', 'g2g3', 'f2f3', 
-                   'e2e3', 'd2d3', 'c2c3', 'b2b3', 'a2a3', 'h2h4', 'g2g4', 
-                   'f2f4', 'e2e4', 'd2d4', 'c2c4', 'b2b4', 'a2a4'];
-var promotions = [];
 var config = {
+    position: 'start',
     pieceTheme: pieceTheme,
     onDrop: onDrop,
-    position: 'start',
     draggable: true,
     showNotation: false,
 }

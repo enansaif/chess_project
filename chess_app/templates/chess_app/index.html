@@ -52,6 +52,11 @@
     <script>
         const game_url = "{% url 'chess_app:play_step' %}";
         var csrf_token = "{{ csrf_token }}";
+        var legal_moves = "{{ legal_moves }}";
+        var promotions = "{{ promotions }}";
+        var is_game_over = "{{ is_game_over }}";
+        var curr_board = "{{ curr_board }}";
+        board.position(curr_board);
     </script>
 </body>
 </html>
