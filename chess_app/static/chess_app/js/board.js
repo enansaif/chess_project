@@ -2,6 +2,14 @@ function pieceTheme (piece) {
     return 'static/chess_app/img/chesspieces/' + piece + '.png';
 }
 
+function updateGame(json_data){
+    legal_moves = json_data['legal_moves'].split(',');
+    promotions = json_data['promotions'].split(',');
+    curr_board = json_data['curr_board'];
+    is_game_over = json_data['is_game_over'];
+    is_check = json_data['is_check'];
+}
+
 function onDrop (source, target) {
     let move = source + target
     if (!(legal_moves.includes(move))) {
@@ -16,23 +24,33 @@ function onDrop (source, target) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
         let json_data = JSON.parse(this.responseText);
-
-        legal_moves = json_data['legal_moves'].split(',');
-        promotions = json_data['promotions'].split(',');
-        is_game_over = json_data['is_game_over'];
+        updateGame(json_data)
 
         if (!(is_game_over)){
-            board.position(json_data['curr_board']);
+            board.position(curr_board);
         } else {
             let status = document.getElementById('status');
             status.innerText = 'Game Over';
         }
     }
 
-    xhttp.open("POST", game_url, true); // game url sent from rendered template
+    xhttp.open("POST", game_url, true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.setRequestHeader("X-CSRFToken", csrf_token);
     xhttp.send(JSON.stringify({move}));
+}
+
+function resetGame() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        let json_data = JSON.parse(this.responseText);
+        updateGame(json_data)
+        board.position(curr_board);
+    }
+
+    xhttp.open("POST", reset_url, true);
+    xhttp.setRequestHeader("X-CSRFToken", csrf_token);
+    xhttp.send();
 }
 
 var config = {

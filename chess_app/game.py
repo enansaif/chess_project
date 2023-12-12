@@ -1,7 +1,7 @@
 import chess
 import random
 
-def get_legal_moves(board):
+def get_game_state(board):
    all_legal_moves = [str(move) for move in board.legal_moves]
    legal_moves, promotions = set(), set()
 
@@ -10,7 +10,15 @@ def get_legal_moves(board):
          promotions.add(move[:4])
       legal_moves.add(move[:4])
    
-   return ','.join(legal_moves), ','.join(promotions)
+   game_state = {
+      'legal_moves': ','.join(legal_moves),
+      'promotions': ','.join(promotions),
+      'curr_board': board.fen(),
+      'is_game_over': board.is_game_over(),
+      'is_check': board.is_check(),
+   }
+   
+   return game_state
 
 def play(player1_move:str, board) -> dict:
    '''Function receives a valid move from player1, ai makes a move 
@@ -20,14 +28,5 @@ def play(player1_move:str, board) -> dict:
    if board.legal_moves:
       board.push(random.choice(list(board.legal_moves)))
 
-   legal_moves, promotions = get_legal_moves(board)
-   
-   game_state = {
-      'legal_moves': legal_moves,
-      'promotions': promotions,
-      'curr_board': board.fen(),
-      'is_game_over': board.is_game_over(),
-      'is_check': board.is_check(),
-   }
-   
+   game_state = get_game_state(board)
    return game_state
