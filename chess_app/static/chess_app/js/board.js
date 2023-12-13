@@ -18,6 +18,9 @@ function onDrop (source, target) {
 
     if (promotions.includes(move)) {
         let selectedOption = document.querySelector('input[name="piece"]:checked');
+        if (confirm("Changing piece to " + selectedOption.id) == false) {
+            return 'snapback';
+        }
         move += selectedOption.value;
     }
 
