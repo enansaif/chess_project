@@ -27,7 +27,9 @@ function onDrop (source, target) {
         updateGame(json_data)
 
         if (!(is_game_over)){
-            board.position(curr_board);
+            setTimeout(() => {
+                board.position(curr_board);
+            }, 100);
         } else {
             let status = document.getElementById('status');
             status.innerText = 'Game Over';
