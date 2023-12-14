@@ -8,6 +8,15 @@ function updateGame(json_data){
     curr_board = json_data['curr_board'];
     is_game_over = json_data['is_game_over'];
     is_check = json_data['is_check'];
+
+    let status = document.getElementById('status');
+    if (is_game_over) {
+        status.innerHTML = '<span class="bg-danger pb-1 px-2 rounded">Game Over</span>';
+    } else if (is_check) {
+        status.innerHTML = '<span class="bg-warning pb-1 px-2 rounded">Check</span>';
+    } else {
+        status.innerHTML = '<span class="bg-success pb-1 px-2 rounded">Active</span>';
+    }
 }
 
 function onDrop (source, target) {
@@ -18,7 +27,7 @@ function onDrop (source, target) {
 
     if (promotions.includes(move)) {
         let selectedOption = document.querySelector('input[name="piece"]:checked');
-        if (confirm("Changing piece to " + selectedOption.id) == false) {
+        if (confirm("Promote pawn to " + selectedOption.id + "?") == false) {
             return 'snapback';
         }
         move += selectedOption.value;
@@ -29,14 +38,13 @@ function onDrop (source, target) {
         let json_data = JSON.parse(this.responseText);
         updateGame(json_data)
 
-        if (!(is_game_over)){
-            setTimeout(() => {
-                board.position(curr_board);
-            }, 100);
-        } else {
-            let status = document.getElementById('status');
-            status.innerText = 'Game Over';
+        if (is_game_over){
+            legal_moves = [];
         }
+        
+        setTimeout(() => {
+            board.position(curr_board);
+        }, 100);
     }
 
     xhttp.open("POST", game_url, true);

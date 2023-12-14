@@ -4,6 +4,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="The main page for showing the game and other info.">
+        <meta name="keywords" content="chess, game, board">
         <title>Document</title>
         <link rel="stylesheet"
               href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
@@ -20,22 +22,33 @@
                 <div class="col-xxl-5 col-xl-6 col-lg-7 col-md-9">
                     <div id="board"></div>
                 </div>
-                <div class="col-lg-4 shadow p-3 m-3 bg-white rounded">
-                    <div>
-                        <p>Game Status: <span id="status">Play Next Move</span></p>
+                <div class="col-lg-auto shadow p-3 m-1 bg-white rounded">
+                    <p>Game Status: <span id="status"><span class="bg-success pb-1 px-2 rounded">Active</span></span></p>
+                    <div class="d-flex justify-content-start align-items-baseline">
+                        <p class="pe-2">Promote To: </p>
+                        <input type="radio" class="btn-check" name="piece" id="Queen" value="q" checked>
+                        <label class="btn" for="Queen">
+                            <img src="{% static 'chess_app/img/chesspieces/wQ.png' %}" alt="Queen" height="30px" width="30px">
+                        </label>
+                        <input type="radio" class="btn-check" name="piece" id="Bishop" value="b">
+                        <label class="btn" for="Bishop">
+                            <img src="{% static 'chess_app/img/chesspieces/wB.png' %}" alt="Bishop" height="30px" width="30px">
+                        </label>
+                        <input type="radio" class="btn-check" name="piece" id="Rook" value="r">
+                        <label class="btn" for="Rook">
+                            <img src="{% static 'chess_app/img/chesspieces/wR.png' %}" alt="Rook" height="30px" width="30px">
+                        </label>
+                        <input type="radio" class="btn-check" name="piece" id="Knight" value="n">
+                        <label class="btn" for="Knight">
+                            <img src="{% static 'chess_app/img/chesspieces/wN.png' %}" alt="Knight" height="30px" width="30px">
+                        </label>
                     </div>
-                    <p>Promote To:</p>
-                    <div>
-                        <input type="radio" class="btn-check" name="piece" id="queen" value="q" checked>
-                        <label class="btn" for="queen">queen</label>
-                        <input type="radio" class="btn-check" name="piece" id="bishop" value="b">
-                        <label class="btn" for="bishop">bishop</label>
-                        <input type="radio" class="btn-check" name="piece" id="rook" value="r">
-                        <label class="btn" for="rook">rook</label>
-                        <input type="radio" class="btn-check" name="piece" id="knight" value="n">
-                        <label class="btn" for="knight">knight</label>
+                    <div class="d-flex justify-content-between mt-2">
+                        <button class="btn btn-outline-danger" onclick="resetGame()">Reset</button>
+                        <button class="btn btn-outline-warning" onclick="">Undo</button>
+                        <button class="btn btn-outline-success" onclick="">Redo</button>
+                        <button class="btn btn-outline-primary" onclick="">Share</button>
                     </div>
-                    <button class="btn btn-secondary mt-3" onclick="resetGame()">Reset Game</button>
                 </div>
             </div>
         </div>
@@ -55,9 +68,8 @@
         var csrf_token = "{{ csrf_token }}";
         var legal_moves = "{{ legal_moves }}";
         var promotions = "{{ promotions }}";
-            var is_game_over = "{{ is_game_over }}";
-            var curr_board = "{{ curr_board }}";
-         
+        var is_game_over = "{{ is_game_over }}";
+        var curr_board = "{{ curr_board }}";
         var is_check = "{{ is_check }}";
         board.position(curr_board);
         </script>
