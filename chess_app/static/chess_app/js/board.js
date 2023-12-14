@@ -53,7 +53,7 @@ function onDrop (source, target) {
     xhttp.send(JSON.stringify({move}));
 }
 
-function resetGame() {
+function hitURL(url) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
         let json_data = JSON.parse(this.responseText);
@@ -61,9 +61,17 @@ function resetGame() {
         board.position(curr_board);
     }
 
-    xhttp.open("POST", reset_url, true);
+    xhttp.open("POST", url, true);
     xhttp.setRequestHeader("X-CSRFToken", csrf_token);
     xhttp.send();
+}
+
+function resetGame(){
+    hitURL(reset_url);
+}
+
+function undoMove(){
+    hitURL(undo_url);
 }
 
 var config = {
