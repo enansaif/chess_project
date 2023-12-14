@@ -37,10 +37,6 @@ function onDrop (source, target) {
     xhttp.onload = function() {
         let json_data = JSON.parse(this.responseText);
         updateGame(json_data)
-
-        if (is_game_over){
-            legal_moves = [];
-        }
         
         setTimeout(() => {
             board.position(curr_board);
