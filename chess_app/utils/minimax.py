@@ -1,4 +1,5 @@
 import chess
+import random
 
 piece_weights = {"p": 100, "n": 280, "b": 320, "r": 479, "q": 929, "k": 2000}
 position_weights = {
@@ -67,7 +68,7 @@ def get_pieces(board, color):
         return white_positions
     return black_positions
 
-def get_score(board, color):
+def calculate_score(board, color):
     board_fen = board.board_fen()
     material_score = 0
     for piece, weight in piece_weights.items():
@@ -83,17 +84,37 @@ def get_score(board, color):
     check_score = 0
     if color != board.turn:
         if board.is_check():
-            check_score += 1500
+            check_score += 200
         if board.is_checkmate():
-            check_score += 3000
+            check_score += 1500
 
     return material_score + position_score + check_score
 
-
 def evaluate(board, color):
-    ai_score = get_score(board, chess.BLACK)
-    player_score = get_score(board, chess.WHITE)
+    ai_score = calculate_score(board, chess.BLACK)
+    player_score = calculate_score(board, chess.WHITE)
     
     if color == chess.WHITE:
         return player_score - ai_score
     return ai_score - player_score
+
+def predict(board, depth, is_ai):
+    if depth == 0 or board.is_game_over():
+        color = chess.BLACK if is_ai else chess.WHITE
+        return None, evaluate(board, color)
+    
+    eval = -1*float('inf') if is_ai else float('inf')
+    best_move = None
+    for move in board.legal_moves:
+        board.push(move)
+        _, curr_eval = predict(board, depth - 1, not is_ai)
+        board.pop()
+        if is_ai:
+            if curr_eval > eval:
+                eval = curr_eval
+                best_move = move
+        else:
+            if curr_eval < eval:
+                eval = curr_eval
+                best_move = move
+    return best_move, eval

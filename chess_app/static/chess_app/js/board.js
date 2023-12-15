@@ -40,9 +40,10 @@ function onDrop (source, target) {
         
         setTimeout(() => {
             board.position(curr_board);
+            isMoveComplete = true;
         }, 100);
     }
-
+    isMoveComplete = false;
     xhttp.open("POST", game_url, true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.setRequestHeader("X-CSRFToken", csrf_token);
@@ -63,11 +64,15 @@ function hitURL(url) {
 }
 
 function resetGame(){
-    hitURL(reset_url);
+    if (isMoveComplete) {
+        hitURL(reset_url);
+    }
 }
 
 function undoMove(){
-    hitURL(undo_url);
+    if (isMoveComplete) {
+        hitURL(undo_url);
+    }
 }
 
 var config = {
@@ -77,5 +82,6 @@ var config = {
     draggable: true,
     showNotation: false,
 }
+var isMoveComplete = true;
 var board = Chessboard('board', config);
 $(window).resize(board.resize);

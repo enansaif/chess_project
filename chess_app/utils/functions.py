@@ -1,5 +1,6 @@
 import chess
 import random
+from .minimax import predict as minimax_predict
 
 def get_game_state(board):
    all_legal_moves = [str(move) for move in board.legal_moves]
@@ -26,7 +27,9 @@ def play(player1_move:str, board) -> dict:
    
    board.push(chess.Move.from_uci(player1_move))
    if board.legal_moves:
-      board.push(random.choice(list(board.legal_moves)))
+      copy_board = chess.Board(board.fen())
+      move, _ = minimax_predict(copy_board, depth=3, is_ai=True)
+      board.push(move)
 
    game_state = get_game_state(board)
    return game_state
