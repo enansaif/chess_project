@@ -1,9 +1,9 @@
+import json
+import chess
 from django.shortcuts import render
 from django.http import JsonResponse
 from .utils import functions
-from .utils import minimax
-import json
-import chess
+from .game import play
 
 board = chess.Board()
 
@@ -14,7 +14,7 @@ def home(request):
 def play_step(request):
     if request.method == 'POST':
         move = json.loads(request.body).get('move')
-        game_state = functions.play(move, board)
+        game_state = play(move, board)
         return JsonResponse(game_state)
 
 def reset_game(request):
