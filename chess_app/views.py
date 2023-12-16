@@ -14,7 +14,8 @@ def home(request):
 def play_step(request):
     if request.method == 'POST':
         move = json.loads(request.body).get('move')
-        game_state = play(move, board)
+        model = json.loads(request.body).get('model')
+        game_state = play(move, board, model)
         return JsonResponse(game_state)
 
 def reset_game(request):

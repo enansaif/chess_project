@@ -43,6 +43,17 @@
                             <img src="{% static 'chess_app/img/chesspieces/wN.png' %}" alt="Knight" height="30px" width="30px">
                         </label>
                     </div>
+                    <div class="d-flex justify-content-start align-items-baseline">
+                        <p class="pe-2">Predictor: </p>
+                        <input type="radio" class="btn-check" name="model" id="Random" value="random">
+                        <label class="btn" for="Random">Random</label>
+                        <input type="radio" class="btn-check" name="model" id="MiniMax" value="minimax" checked>
+                        <label class="btn" for="MiniMax">MiniMax</label>
+                        <input type="radio" class="btn-check" name="model" id="CNN" value="cnn">
+                        <label class="btn" for="CNN">CNN</label>
+                        <input type="radio" class="btn-check" name="model" id="DRL" value="drl">
+                        <label class="btn" for="DRL">DRL</label>
+                    </div>
                     <div class="d-flex justify-content-between mt-2">
                         <button class="btn btn-outline-danger" onclick="resetGame()">Reset</button>
                         <button class="btn btn-outline-warning" onclick="undoMove()">Undo</button>

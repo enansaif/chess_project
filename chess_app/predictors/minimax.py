@@ -1,5 +1,5 @@
 import chess
-from .functions import evaluate
+from ..utils.functions import evaluate
 
 def predict(board, depth, is_ai):
     if depth == 0 or board.is_game_over():
