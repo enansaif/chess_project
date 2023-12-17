@@ -79,6 +79,12 @@ function undoMove() {
   }
 }
 
+function redoMove() {
+  if (isMoveComplete) {
+    hitURL(redo_url);
+  }
+}
+
 var config = {
   position: "start",
   pieceTheme: pieceTheme,

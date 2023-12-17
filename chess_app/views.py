@@ -6,6 +6,7 @@ from .utils import functions
 from .game import play
 
 board = chess.Board()
+prev_moves = []
 
 def home(request):
     game_state = functions.get_game_state(board)
@@ -13,6 +14,7 @@ def home(request):
 
 def play_step(request):
     if request.method == 'POST':
+        prev_moves.clear()
         move = json.loads(request.body).get('move')
         model = json.loads(request.body).get('model')
         game_state = play(move, board, model)
@@ -21,14 +23,23 @@ def play_step(request):
 def reset_game(request):
     if request.method == 'POST':
         board.reset()
+        prev_moves.clear()
         game_state = functions.get_game_state(board)
         return JsonResponse(game_state)
 
 def undo_move(request):
     if request.method == 'POST':
         if board.move_stack and board.turn == chess.WHITE:
-            board.pop()
+            prev_moves.append(board.pop())
         if board.move_stack and board.turn == chess.BLACK:
-            board.pop()
+            prev_moves.append(board.pop())
         game_state = functions.get_game_state(board)
         return JsonResponse(game_state)
+
+def redo_move(request):
+    if request.method == 'POST':
+        while prev_moves:
+            board.push(prev_moves.pop())
+        game_state = functions.get_game_state(board)
+        return JsonResponse(game_state)
+            
