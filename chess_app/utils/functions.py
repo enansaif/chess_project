@@ -2,6 +2,17 @@ import chess
 from .config import piece_weights, position_weights
 
 def get_game_state(board):
+    """
+    Get the current state of the chess game.
+
+    Parameters:
+    - board (chess.Board): The chess board representing the current state of the game.
+
+    Returns:
+    dict: A dictionary containing information about the game state, including legal moves,
+          promotions, current board position in Forsyth-Edwards Notation (FEN),
+          game over status, and check status.
+    """
     all_legal_moves = [str(move) for move in board.legal_moves]
     legal_moves, promotions = set(), set()
 
@@ -22,6 +33,16 @@ def get_game_state(board):
 
 
 def get_pieces(board, color):
+    """
+    Get the positions of pieces on the chess board for a specific color.
+
+    Parameters:
+    - board (chess.Board): The chess board representing the current state of the game.
+    - color (chess.Color): The color for which to get the piece positions.
+
+    Returns:
+    list: A list of tuples containing piece type and position for the specified color.
+    """
     positions = board.piece_map()
     white_positions = []
     black_positions = []
@@ -37,6 +58,16 @@ def get_pieces(board, color):
 
 
 def calculate_score(board, color):
+    """
+    Calculate the overall score for a player in the chess game.
+
+    Parameters:
+    - board (chess.Board): The chess board representing the current state of the game.
+    - color (chess.Color): The color for which to calculate the score.
+
+    Returns:
+    int: The calculated score based on material, piece positions, and check status.
+    """
     board_fen = board.board_fen()
     material_score = 0
     for piece, weight in piece_weights.items():
@@ -60,6 +91,16 @@ def calculate_score(board, color):
 
 
 def evaluate(board, color):
+    """
+    Evaluate the overall position on the chess board for a given player.
+
+    Parameters:
+    - board (chess.Board): The chess board representing the current state of the game.
+    - color (chess.Color): The color for which to evaluate the position.
+
+    Returns:
+    int: The evaluation score for the specified player, taking into account the opponent's position.
+    """
     ai_score = calculate_score(board, chess.BLACK)
     player_score = calculate_score(board, chess.WHITE)
 
