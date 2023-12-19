@@ -49,16 +49,16 @@
                         <label class="btn" for="Random">Random</label>
                         <input type="radio" class="btn-check" name="model" id="MiniMax" value="minimax" checked>
                         <label class="btn" for="MiniMax">MiniMax</label>
-                        <input type="radio" class="btn-check" name="model" id="CNN" value="cnn">
+                        <input type="radio" class="btn-check" name="model" id="CNN" value="cnn" disabled>
                         <label class="btn" for="CNN">CNN</label>
-                        <input type="radio" class="btn-check" name="model" id="DRL" value="drl">
+                        <input type="radio" class="btn-check" name="model" id="DRL" value="drl" disabled>
                         <label class="btn" for="DRL">DRL</label>
                     </div>
                     <div class="d-flex justify-content-between mt-2">
                         <button class="btn btn-outline-danger" onclick="resetGame()">Reset</button>
                         <button class="btn btn-outline-warning" onclick="undoMove()">Undo</button>
                         <button class="btn btn-outline-success" onclick="redoMove()">Redo</button>
-                        <button class="btn btn-outline-primary" onclick="">Share</button>
+                        <button class="btn btn-outline-primary" onclick="" disabled>Home</button>
                     </div>
                 </div>
             </div>
