@@ -6,6 +6,4 @@ urlpatterns = [
     path('', views.home),
     path('play_step', views.play_step, name='play_step'),
     path('reset_game', views.reset_game, name='reset_game'),
-    path('undo_move', views.undo_move, name='undo_move'),
-    path('redo_move', views.redo_move, name='redo_move'),
 ]

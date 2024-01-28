@@ -5,9 +5,6 @@ from django.http import JsonResponse
 from .utils import functions
 from .game import play
 
-board = chess.Board()
-prev_moves = []
-
 def home(request):
     """
     View function for rendering the home page of the chess application.
@@ -18,7 +15,7 @@ def home(request):
     Returns:
     HttpResponse: Rendered HTML page with the current game state.
     """
-    game_state = functions.get_game_state(board)
+    game_state = functions.get_game_state(chess.Board())
     return render(request, 'chess_app/index.html', context=game_state)
 
 def play_step(request):
@@ -31,12 +28,11 @@ def play_step(request):
     Returns:
     JsonResponse: JSON response containing the updated game state after the player's move.
     """
-    if request.method == 'POST':
-        prev_moves.clear()
-        move = json.loads(request.body).get('move')
-        model = json.loads(request.body).get('model')
-        game_state = play(move, board, model)
-        return JsonResponse(game_state)
+    board = chess.Board(json.loads(request.body).get('curr_board'))
+    move = json.loads(request.body).get('move')
+    model = json.loads(request.body).get('model')
+    game_state = play(move, board, model)
+    return JsonResponse(game_state)
 
 def reset_game(request):
     """
@@ -48,42 +44,5 @@ def reset_game(request):
     Returns:
     JsonResponse: JSON response containing the updated game state after resetting the game.
     """
-    if request.method == 'POST':
-        board.reset()
-        prev_moves.clear()
-        game_state = functions.get_game_state(board)
-        return JsonResponse(game_state)
-
-def undo_move(request):
-    """
-    View function for undoing the last move in the chess game.
-
-    Parameters:
-    - request (HttpRequest): The HTTP request object.
-
-    Returns:
-    JsonResponse: JSON response containing the updated game state after undoing the last move.
-    """
-    if request.method == 'POST':
-        if board.move_stack and board.turn == chess.WHITE:
-            prev_moves.append(board.pop())
-        if board.move_stack and board.turn == chess.BLACK:
-            prev_moves.append(board.pop())
-        game_state = functions.get_game_state(board)
-        return JsonResponse(game_state)
-
-def redo_move(request):
-    """
-    View function for redoing the last undone moves in the chess game.
-
-    Parameters:
-    - request (HttpRequest): The HTTP request object.
-
-    Returns:
-    JsonResponse: JSON response containing the updated game state after redoing the last move.
-    """
-    if request.method == 'POST':
-        while prev_moves:
-            board.push(prev_moves.pop())
-        game_state = functions.get_game_state(board)
-        return JsonResponse(game_state)
+    game_state = functions.get_game_state(chess.Board())
+    return JsonResponse(game_state)

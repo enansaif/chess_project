@@ -34,6 +34,29 @@ function updateGame(json_data) {
 }
 
 /**
+ * Sends an XMLHttpRequest to a specified URL and updates the game based on the response.
+ *
+ * @param {string} url - The URL to send the request to.
+ */
+function hitURL(url, move) {
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function () {
+    let json_data = JSON.parse(this.responseText);
+    updateGame(json_data);
+    setTimeout(() => {
+      board.position(curr_board);
+      isMoveComplete = true;
+    }, 100);
+  };
+  isMoveComplete = false;
+  let model = document.querySelector('input[name="model"]:checked').value;
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.setRequestHeader("X-CSRFToken", csrf_token);
+  xhttp.send(JSON.stringify({ curr_board, move, model }));
+}
+
+/**
  * Handles the drop event when a chess piece is moved on the board.
  *
  * @param {string} source - The source square of the move.
@@ -54,40 +77,9 @@ function onDrop(source, target) {
     move += selectedOption.value;
   }
 
-  const xhttp = new XMLHttpRequest();
-  xhttp.onload = function () {
-    let json_data = JSON.parse(this.responseText);
-    updateGame(json_data);
-
-    setTimeout(() => {
-      board.position(curr_board);
-      isMoveComplete = true;
-    }, 100);
-  };
-  isMoveComplete = false;
-  let model = document.querySelector('input[name="model"]:checked').value;
-  xhttp.open("POST", game_url, true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
-  xhttp.setRequestHeader("X-CSRFToken", csrf_token);
-  xhttp.send(JSON.stringify({ move, model }));
-}
-
-/**
- * Sends an XMLHttpRequest to a specified URL and updates the game based on the response.
- *
- * @param {string} url - The URL to send the request to.
- */
-function hitURL(url) {
-  const xhttp = new XMLHttpRequest();
-  xhttp.onload = function () {
-    let json_data = JSON.parse(this.responseText);
-    updateGame(json_data);
-    board.position(curr_board);
-  };
-
-  xhttp.open("POST", url, true);
-  xhttp.setRequestHeader("X-CSRFToken", csrf_token);
-  xhttp.send();
+  if (isMoveComplete) {
+    hitURL(game_url, move);
+  }
 }
 
 /**
@@ -95,25 +87,7 @@ function hitURL(url) {
  */
 function resetGame() {
   if (isMoveComplete) {
-    hitURL(reset_url);
-  }
-}
-
-/**
- * Undoes the last move if the current move is complete.
- */
-function undoMove() {
-  if (isMoveComplete) {
-    hitURL(undo_url);
-  }
-}
-
-/**
- * Redoes the last undone move if the current move is complete.
- */
-function redoMove() {
-  if (isMoveComplete) {
-    hitURL(redo_url);
+    hitURL(reset_url, null);
   }
 }
 
